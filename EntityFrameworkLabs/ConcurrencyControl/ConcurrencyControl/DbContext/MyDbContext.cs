@@ -3,6 +3,8 @@ using System.Reflection;
 using ConcurrencyControl.DbContext.Configurations;
 using ConcurrencyControl.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Console;
 
 namespace ConcurrencyControl.DbContext
 {
@@ -13,10 +15,16 @@ namespace ConcurrencyControl.DbContext
         public DbSet<ConcurrentAccountWithRowVersion> ConcurrentAccountsWithRowVersion { get; protected set; }
         public DbSet<NonconcurrentAccount> NonconcurrentAccounts { get; protected set; }
 
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder )
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-                optionsBuilder = optionsBuilder.UseSqlite($"Data source={DbFileName}",
+            optionsBuilder = optionsBuilder
+                .UseLoggerFactory(new LoggerFactory(new[]
+                {
+                    new ConsoleLoggerProvider((category, level)
+                        => category == DbLoggerCategory.Database.Command.Name
+                           && level == LogLevel.Information, true)
+                }))
+                .UseSqlite($"Data source={DbFileName}",
                     options => { options.MigrationsAssembly(Assembly.GetExecutingAssembly().FullName); });
             base.OnConfiguring(optionsBuilder);
         }

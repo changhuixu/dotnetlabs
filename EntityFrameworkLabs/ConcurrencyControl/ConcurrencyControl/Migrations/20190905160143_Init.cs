@@ -21,27 +21,6 @@ namespace ConcurrencyControl.Migrations
                     table.PrimaryKey("PK_ConcurrentAccountsWithRowVersion", x => x.Id);
                 });
 
-            migrationBuilder.Sql(
-                @"
-                    CREATE TRIGGER SetTimestampOnUpdate
-                    AFTER UPDATE ON ConcurrentAccountsWithRowVersion
-                    BEGIN
-                        UPDATE ConcurrentAccountsWithRowVersion
-                        SET Timestamp = randomblob(8)
-                        WHERE rowid = NEW.rowid;
-                    END
-                ");
-            migrationBuilder.Sql(
-                @"
-                    CREATE TRIGGER SetTimestampOnInsert
-                    AFTER INSERT ON ConcurrentAccountsWithRowVersion
-                    BEGIN
-                        UPDATE ConcurrentAccountsWithRowVersion
-                        SET Timestamp = randomblob(8)
-                        WHERE rowid = NEW.rowid;
-                    END
-                ");
-
             migrationBuilder.CreateTable(
                 name: "ConcurrentAccountsWithToken",
                 columns: table => new

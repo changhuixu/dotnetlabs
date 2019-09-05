@@ -16,6 +16,29 @@ namespace ConcurrencyControl
             using (var dbContext = new MyDbContext())
             {
                 dbContext.Database.Migrate();
+                if (dbContext.Database.IsSqlite())
+                {
+                    await dbContext.Database.ExecuteSqlCommandAsync(
+                        @"
+                            CREATE TRIGGER SetTimestampOnUpdate
+                            AFTER UPDATE ON ConcurrentAccountsWithRowVersion
+                            BEGIN
+                                UPDATE ConcurrentAccountsWithRowVersion
+                                SET Timestamp = randomblob(8)
+                                WHERE rowid = NEW.rowid;
+                            END
+                        ");
+                    await dbContext.Database.ExecuteSqlCommandAsync(
+                        @"
+                            CREATE TRIGGER SetTimestampOnInsert
+                            AFTER INSERT ON ConcurrentAccountsWithRowVersion
+                            BEGIN
+                                UPDATE ConcurrentAccountsWithRowVersion
+                                SET Timestamp = randomblob(8)
+                                WHERE rowid = NEW.rowid;
+                            END
+                        ");
+                }
                 await dbContext.NonconcurrentAccounts.AddAsync(new NonconcurrentAccount { Id = 1, Balance = 1000.0m });
                 await dbContext.ConcurrentAccountsWithToken.AddAsync(new ConcurrentAccountWithToken { Id = 1, Balance = 1000.0m });
                 await dbContext.ConcurrentAccountsWithRowVersion.AddAsync(new ConcurrentAccountWithRowVersion { Id = 1, Balance = 1000.0m });
