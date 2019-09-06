@@ -25,10 +25,7 @@ namespace ConcurrencyControl.Models
                 Console.WriteLine($"Balance after debit  :{Balance,5}");
                 return amount;
             }
-            else
-            {
-                return 0;
-            }
+            return 0;
         }
     }
 }

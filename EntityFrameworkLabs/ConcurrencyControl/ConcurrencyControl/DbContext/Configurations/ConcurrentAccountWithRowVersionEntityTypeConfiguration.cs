@@ -28,7 +28,6 @@ namespace ConcurrencyControl.DbContext.Configurations
             builder.Property(x => x.Balance).HasColumnName("Balance").HasConversion<double>();
             builder.Property(x => x.Timestamp).HasColumnName("Timestamp")
                 .HasColumnType("BLOB")
-                .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .IsRowVersion();
         }
     }

@@ -29,8 +29,7 @@ namespace ConcurrencyControl.Migrations
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnName("Timestamp")
-                        .HasColumnType("BLOB")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+                        .HasColumnType("BLOB");
 
                     b.HasKey("Id");
 

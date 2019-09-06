@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ConcurrencyControl.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    [Migration("20190905160143_Init")]
+    [Migration("20190906141104_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -31,8 +31,7 @@ namespace ConcurrencyControl.Migrations
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnName("Timestamp")
-                        .HasColumnType("BLOB")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+                        .HasColumnType("BLOB");
 
                     b.HasKey("Id");
 

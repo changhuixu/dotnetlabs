@@ -107,34 +107,34 @@ namespace ConcurrencyControl
             var threads = new Thread[2];
             threads[0] = new Thread(async () =>
             {
-                try
+                using (var dbContext = new MyDbContext())
                 {
-                    using (var dbContext = new MyDbContext())
+                    var account = await dbContext.ConcurrentAccountsWithToken.FindAsync(1);
+                    account.Credit(100);
+                    try
                     {
-                        var account = await dbContext.ConcurrentAccountsWithToken.FindAsync(1);
-                        account.Credit(100);
                         await dbContext.SaveChangesAsync();
                     }
-                }
-                catch (DbUpdateConcurrencyException e)
-                {
-                    ConsoleUtils.WriteErr(e.Message);
+                    catch (DbUpdateConcurrencyException e)
+                    {
+                        ConsoleUtils.WriteErr(e.Message);
+                    }
                 }
             });
             threads[1] = new Thread(async () =>
             {
-                try
+                using (var dbContext = new MyDbContext())
                 {
-                    using (var dbContext = new MyDbContext())
+                    var account = await dbContext.ConcurrentAccountsWithToken.FindAsync(1);
+                    account.Debit(200);
+                    try
                     {
-                        var account = await dbContext.ConcurrentAccountsWithToken.FindAsync(1);
-                        account.Debit(200);
                         await dbContext.SaveChangesAsync();
                     }
-                }
-                catch (DbUpdateConcurrencyException e)
-                {
-                    ConsoleUtils.WriteErr(e.Message);
+                    catch (DbUpdateConcurrencyException e)
+                    {
+                        ConsoleUtils.WriteErr(e.Message);
+                    }
                 }
             });
 
@@ -162,34 +162,34 @@ namespace ConcurrencyControl
             var threads = new Thread[2];
             threads[0] = new Thread(async () =>
             {
-                try
+                using (var dbContext = new MyDbContext())
                 {
-                    using (var dbContext = new MyDbContext())
+                    var account = await dbContext.ConcurrentAccountsWithRowVersion.FindAsync(1);
+                    account.Credit(100);
+                    try
                     {
-                        var account = await dbContext.ConcurrentAccountsWithRowVersion.FindAsync(1);
-                        account.Credit(100);
                         await dbContext.SaveChangesAsync();
                     }
-                }
-                catch (DbUpdateConcurrencyException e)
-                {
-                    ConsoleUtils.WriteErr(e.Message);
+                    catch (DbUpdateConcurrencyException e)
+                    {
+                        ConsoleUtils.WriteErr(e.Message);
+                    }
                 }
             });
             threads[1] = new Thread(async () =>
             {
-                try
+                using (var dbContext = new MyDbContext())
                 {
-                    using (var dbContext = new MyDbContext())
+                    var account = await dbContext.ConcurrentAccountsWithRowVersion.FindAsync(1);
+                    account.Debit(200);
+                    try
                     {
-                        var account = await dbContext.ConcurrentAccountsWithRowVersion.FindAsync(1);
-                        account.Debit(200);
                         await dbContext.SaveChangesAsync();
                     }
-                }
-                catch (DbUpdateConcurrencyException e)
-                {
-                    ConsoleUtils.WriteErr(e.Message);
+                    catch (DbUpdateConcurrencyException e)
+                    {
+                        ConsoleUtils.WriteErr(e.Message);
+                    }
                 }
             });
 
