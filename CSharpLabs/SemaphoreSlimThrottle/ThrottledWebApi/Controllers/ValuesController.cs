@@ -8,7 +8,7 @@ namespace ThrottledWebApi.Controllers
     public class ValuesController : ControllerBase
     {
         [HttpGet("isPrime")]
-        public ActionResult<bool> Get(int number)
+        public ActionResult<bool> Get(long number)
         {
             try
             {
@@ -27,7 +27,7 @@ namespace ThrottledWebApi.Controllers
         // 11,13,17,19,23,29,31,41,43 -> true;
         // 1763=41*43   --> false;
         // 7400854980481283=86028221*86028223 -> false;
-        private static bool IsPrime(int number)
+        private static bool IsPrime(long number)
         {
             if (number <= 0)
             {
@@ -46,7 +46,7 @@ namespace ThrottledWebApi.Controllers
                 return false;
             }
 
-            var boundary = (int)Math.Floor(Math.Sqrt(number));
+            var boundary = (long)Math.Floor(Math.Sqrt(number));
             var i = 6;
             while (i <= boundary)
             {
