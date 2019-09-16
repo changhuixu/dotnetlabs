@@ -8,7 +8,7 @@ namespace ThrottledWebApi.Controllers
     public class ValuesController : ControllerBase
     {
         [HttpGet("isPrime")]
-        public ActionResult<bool> Get(long number)
+        public ActionResult<bool> GetIsPrime(long number)
         {
             try
             {
@@ -39,7 +39,7 @@ namespace ThrottledWebApi.Controllers
             }
             if (number == 2 || number == 3 || number == 5)
             {
-                return false;
+                return true;
             }
             if (number % 2 == 0 || number % 3 == 0 || number % 5 == 0)
             {
