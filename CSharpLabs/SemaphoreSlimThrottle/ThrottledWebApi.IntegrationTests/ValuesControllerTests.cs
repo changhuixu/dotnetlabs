@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -43,18 +42,56 @@ namespace ThrottledWebApi.IntegrationTests
         }
 
         [TestMethod]
-        public async Task ExpectHttpHeaderWhenExceedRateLimit()
+        public async Task ExpectHttpHeadersWhenExceedRateLimit()
         {
             var numbers = new List<long> { 1, 12, 11 };
             var allTasks = numbers.Select(n => Task.Run(async () =>
             {
                 var response = await _httpClient.GetAsync($"api/values/isPrime?number={n}");
-                return response.Headers;
+                return new
+                {
+                    Number = n,
+                    Headers = response.Headers.ToList()
+                };
             })).ToList();
-            async Task ConcurrentApiRequests() => await Task.WhenAll(allTasks);
-            var e = await Assert.ThrowsExceptionAsync<HttpRequestException>(ConcurrentApiRequests);
-            Assert.AreEqual("Response status code does not indicate success: 429 (Too Many Requests).", e.Message);
+
+            var results = await Task.WhenAll(allTasks);
+
+            // assert
+            var retryHeaders = results.SelectMany(x => x.Headers).Where(x => x.Key == "Retry-After").ToList();
+            Assert.AreEqual(1, retryHeaders.Count);
+            Assert.AreEqual("1", string.Join(", ", retryHeaders[0].Value));
+            var xRateLimitHeaders = results.SelectMany(x => x.Headers).Where(x => x.Key.StartsWith("X-Rate-Limit")).ToList();
+            Assert.AreEqual(6, xRateLimitHeaders.Count);
+
+            // auxiliary method to print out all headers.
+            foreach (var result in results)
+            {
+                Console.WriteLine($"\r\nHTTP Response Headers for number = {result.Number}:");
+                foreach (var (key, value) in result.Headers)
+                {
+                    Console.WriteLine($"\t{key}: {string.Join(", ", value)}");
+                }
+            }
         }
+/* Test Output
+
+TEST Server Started.
+
+HTTP Response Headers for number = 1:
+	Retry-After: 1
+
+HTTP Response Headers for number = 12:
+	X-Rate-Limit-Limit: 1s
+	X-Rate-Limit-Remaining: 1
+	X-Rate-Limit-Reset: 2019-09-17T18:51:02.4401731Z
+
+HTTP Response Headers for number = 11:
+	X-Rate-Limit-Limit: 1s
+	X-Rate-Limit-Remaining: 0
+	X-Rate-Limit-Reset: 2019-09-17T18:51:02.4401731Z
+
+*/
 
         [TestMethod]
         public async Task TestWithSemaphoreSlim()
