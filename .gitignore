@@ -328,3 +328,5 @@ ASALocalRun/
 
 # MFractors (Xamarin productivity tool) working folder 
 .mfractor/
+
+CSharpLabs/RunExeFromWebApi/WebApi/App_Data/
