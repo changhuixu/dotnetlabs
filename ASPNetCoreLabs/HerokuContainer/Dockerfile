@@ -5,6 +5,7 @@ EXPOSE 80
 # NuGet restore
 FROM mcr.microsoft.com/dotnet/core/sdk:3.0-buster AS build
 WORKDIR /src
+RUN pwd
 COPY *.sln .
 COPY Colors.UnitTests/*.csproj, Colors.UnitTests/
 COPY Colors.API/*.csproj, Colors.API/
