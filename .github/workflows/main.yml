@@ -1,0 +1,27 @@
+name: CI
+
+on:
+  push:
+    branches:
+    - master
+    - release/*
+
+jobs:
+
+  build_icolors:
+    if: contains( github.event.head_commit.message, 'HerokuContainer' )
+    runs-on: ubuntu-16.04
+ 
+    steps:
+    - uses: actions/checkout@v1
+    - name: Build and deploy the Docker image
+      env: 
+        HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        APP_NAME: ${{ 'icolors' }}
+      run: |
+        cd ./ASPNetCoreLabs/HerokuContainer
+        docker build . -t $APP_NAME -f Dockerfile
+        docker login --username=_ --password=$HEROKU_API_KEY registry.heroku.com
+        docker tag $APP_NAME registry.heroku.com/$APP_NAME/web
+        heroku container:push web -a $APP_NAME
+        heroku container:release web -a $APP_NAME
