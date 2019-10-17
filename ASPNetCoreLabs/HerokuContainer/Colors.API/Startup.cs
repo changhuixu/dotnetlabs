@@ -53,10 +53,12 @@ namespace Colors.API
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseHsts();
+
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Color API V1");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Colors API V1");
                 c.RoutePrefix = string.Empty;   // To serve the Swagger UI at the app's root (http://localhost:<port>/), set the RoutePrefix property to an empty string:
             });
 

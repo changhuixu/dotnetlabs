@@ -1,5 +1,5 @@
-# Deploy .NET Core 3 Web API app to Heroku
+# Deploy a Dockerized ASP.NET Core 3 Web API app to Heroku
 
-## [API Website](http://icolors.herokuapp.com)
+## [API Website](https://icolors.herokuapp.com)
 
-## [Medium Article]()
+## [Medium Article](https://codeburst.io/deploy-a-containerized-asp-net-core-app-to-heroku-using-github-actions-9e54c72db943)
