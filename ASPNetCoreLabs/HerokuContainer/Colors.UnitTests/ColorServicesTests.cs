@@ -65,5 +65,16 @@ namespace Colors.UnitTests
 
             Assert.AreEqual(1.0, ColorServices.GetContrastRatio(ColorTranslator.FromHtml("#a"), ColorTranslator.FromHtml("#b")));
         }
+
+        [DataTestMethod]
+        [DataRow("#FFFFFF", 255)]
+        [DataRow("#33FF33", 170.748)]
+        [DataRow("#333333", 51)]
+        [DataRow("#000000", 0)]
+        public void GetColorBrightnessTests(string hex, double brightness)
+        {
+            var color = ColorTranslator.FromHtml(hex);
+            Assert.AreEqual(brightness, ColorServices.GetBrightness(color));
+        }
     }
 }
