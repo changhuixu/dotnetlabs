@@ -1,0 +1,23 @@
+{
+  "myString": "Hello World",
+  "myInt": 123,
+  "myBoolean": true,
+  "myDecimal": 12.3,
+  "myDateTime1": "2019-09-23T10:10:00",
+  "myDateTime2": "2019-09-23",
+  "myStringList": ["apple", "banana", "orange"],
+  "myDictionary": {
+    "person1": {
+      "id": 201,
+      "name": "C#"
+    },
+    "person2": {
+      "id": 302,
+      "name": "F#"
+    }
+  },
+  "myAnotherModel": {
+    "myString": "Hi there",
+    "myInt": 456
+  }
+}
