@@ -20,8 +20,6 @@ jobs:
         APP_NAME: ${{ 'icolors' }}
       run: |
         cd ./ASPNetCoreLabs/HerokuContainer
-        docker build . -t $APP_NAME -f Dockerfile
         docker login --username=_ --password=$HEROKU_API_KEY registry.heroku.com
-        docker tag $APP_NAME registry.heroku.com/$APP_NAME/web
         heroku container:push web -a $APP_NAME
         heroku container:release web -a $APP_NAME
