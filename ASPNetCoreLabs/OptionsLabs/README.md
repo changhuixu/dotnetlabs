@@ -2,7 +2,7 @@
 
 This solution demos one of the usages of the Options Pattern in .NET Core.
 
-## [Medium Post](')
+## [Medium Post](https://codeburst.io/options-pattern-in-net-core-a50285aeb18d)
 
 When registering dependencies in the `ConfigureServices` method, you must have seen a pattern likes the following
 
