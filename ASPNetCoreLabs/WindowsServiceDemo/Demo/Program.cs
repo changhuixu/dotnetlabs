@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using Demo.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
@@ -53,6 +54,9 @@ namespace Demo
                 .ConfigureServices((hostContext, services) =>
                 {
                     services.AddHostedService<Worker>();
+                    services.Configure<AppSettings>(hostContext.Configuration.GetSection("AppSettings"));
+                    services.AddScoped<IServiceA, ServiceA>();
+                    services.AddScoped<IServiceB, ServiceB>();
                 })
                 .UseSerilog();
     }

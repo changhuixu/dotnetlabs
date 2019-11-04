@@ -1,8 +1,12 @@
+using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using Demo.Services;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace Demo
 {
@@ -11,11 +15,13 @@ namespace Demo
         private readonly ILogger<Worker> _logger;
         private FileSystemWatcher _folderWatcher;
         private readonly string _inputFolder;
+        private readonly IServiceProvider _services;
 
-        public Worker(ILogger<Worker> logger)
+        public Worker(ILogger<Worker> logger, IOptions<AppSettings> settings, IServiceProvider services)
         {
             _logger = logger;
-            _inputFolder = @"C:\temp";
+            _services = services;
+            _inputFolder = settings.Value.InputFolder;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -51,6 +57,11 @@ namespace Demo
                 _logger.LogInformation($"InBound Change Event Triggered by [{e.FullPath}]");
 
                 // do some work
+                using (var scope = _services.CreateScope())
+                {
+                    var serviceA = scope.ServiceProvider.GetRequiredService<IServiceA>();
+                    serviceA.Run();
+                }
 
                 _logger.LogInformation("Done with Inbound Change Event");
             }
