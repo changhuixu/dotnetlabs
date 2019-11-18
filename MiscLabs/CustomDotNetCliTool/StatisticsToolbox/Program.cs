@@ -42,6 +42,7 @@ namespace StatisticsToolbox
                 sdCmd, avgCmd
             };
 
+            rootCommand.Name = "stat";
             rootCommand.Description = "Statistics Toolbox";
 
             if (args.Length == 0)
