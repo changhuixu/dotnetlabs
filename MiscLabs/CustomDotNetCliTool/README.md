@@ -1,16 +1,16 @@
 # .NET Core Global Tools
 
-## [Medium Article]()
+## [Medium Article](https://codeburst.io/creating-a-custom-net-core-global-tool-40cf3c1410c9)
 
-This blog post discusses
+This blog post discussed CLI tools. It contains a step-by-step guide of creating a custom .NET Core global tool.
 
-## Build Locally
+## Build this project Locally
 
 You can build this project locally either using Docker or using .NET CLI tools.
 
 ### 1. using Docker with Linux containers
 
-<img src="./global-tool-in-docker.gif">
+![global tool in docker](./global-tool-in-docker.gif)
 
 ```PowerShell
 docker build -t global-tool-test .
