@@ -1,9 +1,11 @@
-# Handwriting Numbers Recognition using ML.NET
+# Handwriting Recognition using ML.NET
 
-## [Demo Website](https://icolors.herokuapp.com)
+## [Demo Website](https://ml-recognition.herokuapp.com/)
 
-## [Medium Article](https://codeburst.io/deploy-a-containerized-asp-net-core-app-to-heroku-using-github-actions-9e54c72db943)
+## [Medium Article](https://codeburst.io/handwriting-recognition-using-ml-net-3ce23a7369af)
 
-In this blog post, we will create a containerized ASP.NET Core 3.0 Web API project, and set up a CI/CD pipeline using GitHub Actions. In the GitHub workflow, we will build and test the Web API project, and deploy the final docker image to Heroku.
+ML.NET is a cross-platform machine learning framework which provides state-of-art machine learning algorithms, transforms and components. ML.NET allows .NET developers to develop/train models and integrate machine learning with their .NET applications, even without prior expertise of tuning machine learning models.
+
+In this blog post, we will make a web application to recognize handwriting numbers using ML.NET. The [demo web app](https://ml-recognition.herokuapp.com/) is running in a Linux container, which demonstrates the cross-platform capability of ML.NET and ASP.NET Core.
 
 ![handwriting digits recognition](./handwriting-digits-recognition.gif)

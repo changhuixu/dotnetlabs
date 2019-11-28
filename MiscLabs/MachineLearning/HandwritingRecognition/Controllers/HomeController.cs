@@ -10,20 +10,21 @@ using Microsoft.Extensions.Logging;
 using HandwritingRecognition.Models;
 using HandwritingRecognitionML.Model;
 using Microsoft.AspNetCore.Http;
-using Microsoft.ML;
+using Microsoft.Extensions.ML;
 
 namespace HandwritingRecognition.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly PredictionEnginePool<ModelInput, ModelOutput> _predictionEnginePool;
         private const int SizeOfImage = 32;
         private const int SizeOfArea = 4;
-        private const string ModelZip = "MLModel.zip";
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, PredictionEnginePool<ModelInput, ModelOutput> predictionEnginePool)
         {
             _logger = logger;
+            _predictionEnginePool = predictionEnginePool;
         }
 
         public IActionResult Index()
@@ -45,22 +46,22 @@ namespace HandwritingRecognition.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult Upload(string imgBase64)
+        public IActionResult Upload(string base64Image)
         {
-            if (string.IsNullOrEmpty(imgBase64))
+            if (string.IsNullOrEmpty(base64Image))
             {
                 return BadRequest(new { prediction = "-", dataset = string.Empty });
             }
-            var mlContext = new MLContext();
-            var mlModel = mlContext.Model.Load(ModelZip, out _);
-            var predEngine = mlContext.Model.CreatePredictionEngine<ModelInput, ModelOutput>(mlModel);
-
-            var pixelValues = GetPixelValuesFromImage(imgBase64.Replace("data:image/png;base64,", ""));
-
+            var pixelValues = GetPixelValuesFromImage(base64Image.Replace("data:image/png;base64,", ""));
             var input = new ModelInput { PixelValues = pixelValues.ToArray() };
-            var result = predEngine.Predict(input);
+            var result = _predictionEnginePool.Predict(modelName: HWRModel.Name, example: input);
             _logger.LogInformation($"Number {result.Prediction} is returned.");
-            return Ok(new { prediction = result.Prediction, scores = FormatScores(result.Score), pixelValues = string.Join(",", pixelValues) });
+            return Ok(new
+            {
+                prediction = result.Prediction, 
+                scores = FormatScores(result.Score), 
+                pixelValues = string.Join(",", pixelValues)
+            });
         }
 
         private static List<float> GetPixelValuesFromImage(string base64Image)
@@ -100,7 +101,7 @@ namespace HandwritingRecognition.Controllers
 
         private static string FormatScores(IReadOnlyList<float> scores)
         {
-            // order is: 0,7,4,6,2,5,8,1,9,3 (the order appears in the training data set)
+            // order is: 0,7,4,6,2,5,8,1,9,3 (the order of labels appear in the training data set)
             var sb = new StringBuilder();
             sb.Append($"0: {scores[0]:N3}").AppendLine();
             sb.Append($"1: {scores[7]:N3}").AppendLine();

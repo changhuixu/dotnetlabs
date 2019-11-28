@@ -10,41 +10,48 @@
   if (!el) return;
   var ctx = el.getContext('2d');
 
-  $('#canvas').mousedown(function(e) {
+  el.addEventListener('mousedown', function(e) {
+    e.preventDefault();
     mousePressed = true;
-    draw(
-      e.pageX - $(this).offset().left,
-      e.pageY - $(this).offset().top,
-      false
-    );
+    draw(e, false);
+  });
+  el.addEventListener('touchstart', function(e) {
+    e.preventDefault();
+    mousePressed = true;
+    draw(e, false);
   });
 
-  $('#canvas').mousemove(function(e) {
+  el.addEventListener('mousemove', function(e) {
+    e.preventDefault();
     if (mousePressed) {
-      draw(
-        e.pageX - $(this).offset().left,
-        e.pageY - $(this).offset().top,
-        true
-      );
+      draw(e, true);
+    }
+  });
+  el.addEventListener('touchmove', function(e) {
+    e.preventDefault();
+    if (mousePressed) {
+      draw(e, true);
     }
   });
 
-  $('#canvas').mouseup(function() {
+  el.addEventListener('touchend', stopDrawing);
+  el.addEventListener('mouseup', stopDrawing);
+  el.addEventListener('touchcancel', stopDrawing);
+  el.addEventListener('mouseleave', stopDrawing);
+  function stopDrawing(e) {
+    e.preventDefault();
     mousePressed = false;
-  });
-  $('#canvas').mouseleave(function() {
-    mousePressed = false;
-  });
+  }
 
-  $('#clearArea').click(function() {
-    clearArea();
-  });
-
-  $('#check').click(function() {
-    check();
-  });
-
-  function draw(x, y, isDown) {
+  function draw(e, isDown) {
+    var x =
+      (e.clientX || e.touches[0].clientX) +
+      (document.documentElement.scrollLeft || document.body.scrollLeft) -
+      el.offsetLeft;
+    var y =
+      (e.clientY || e.touches[0].clientY) +
+      (document.documentElement.scrollTop || document.body.scrollTop) -
+      el.offsetTop;
     if (isDown) {
       ctx.beginPath();
       ctx.strokeStyle = '#FF0000';
@@ -59,26 +66,25 @@
     lastY = y;
   }
 
-  function clearArea() {
+  $('#clearArea').click(function() {
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     $('#prediction').text('?');
     $('#scores').text('');
-  }
+  });
 
-  function check() {
-    var canvas = document.getElementById('canvas');
+  $('#check').click(function() {
     $('#prediction').text('?');
     $.ajax({
       type: 'POST',
       url: 'home/upload',
       data: {
-        imgBase64: canvas.toDataURL()
+        base64Image: el.toDataURL()
       }
     }).done(function(msg) {
       console.log(msg.pixelValues);
       $('#prediction').text(msg.prediction);
       $('#scores').text(msg.scores);
     });
-  }
+  });
 })();
