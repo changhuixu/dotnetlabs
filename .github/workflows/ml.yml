@@ -1,0 +1,22 @@
+name: ML-Recognition
+
+on:
+  push:
+    branches:
+      - 'MiscLabs/HandwritingRecognition'
+
+jobs:
+  build:
+    runs-on: ubuntu-16.04
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Build and deploy the Docker image
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+          APP_NAME: ${{ 'ml-recognition' }}
+        run: |
+          cd ./MiscLabs/MachineLearning
+          docker login --username=_ --password=$HEROKU_API_KEY registry.heroku.com
+          heroku container:push web -a $APP_NAME
+          heroku container:release web -a $APP_NAME
