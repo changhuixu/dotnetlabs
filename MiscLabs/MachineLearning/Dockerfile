@@ -5,6 +5,7 @@ COPY *.sln ./
 COPY HandwritingRecognition/*.csproj HandwritingRecognition/
 COPY HandwritingRecognitionML.Model/*.csproj HandwritingRecognitionML.Model/
 COPY HandwritingRecognitionML.ConsoleApp/*.csproj HandwritingRecognitionML.ConsoleApp/
+COPY TaxiFareML.Model/*.csproj TaxiFareML.Model/
 RUN dotnet restore
 COPY . .
 

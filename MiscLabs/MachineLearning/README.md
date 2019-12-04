@@ -9,3 +9,7 @@ ML.NET is a cross-platform machine learning framework which provides state-of-ar
 In this blog post, we will make a web application to recognize handwriting numbers using ML.NET. The [demo web app](https://ml-recognition.herokuapp.com/) is running in a Linux container, which demonstrates the cross-platform capability of ML.NET and ASP.NET Core.
 
 ![handwriting digits recognition](./handwriting-digits-recognition.gif)
+
+## Note
+
+This solution contains two ML.NET models. One is about Handwriting Recognition, the other one is about taxi fare prediction.
