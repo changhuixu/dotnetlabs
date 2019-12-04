@@ -11,6 +11,13 @@
 
   <ItemGroup>
     <ProjectReference Include="..\HandwritingRecognitionML.Model\HandwritingRecognitionML.Model.csproj" />
+    <ProjectReference Include="..\TaxiFareML.Model\TaxiFareML.Model.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="TaxiFare_MLModel.zip">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
