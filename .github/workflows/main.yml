@@ -3,14 +3,12 @@ name: CI
 on:
   push:
     branches:
-    - master
-    - release/*
+    - 'ASPNetCoreLabs/HerokuContainer'
 
 jobs:
 
   build_icolors:
-    if: contains( github.event.head_commit.message, 'HerokuContainer' )
-    runs-on: ubuntu-16.04
+    runs-on: ubuntu-latest
  
     steps:
     - uses: actions/checkout@v1

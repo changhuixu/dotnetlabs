@@ -27,7 +27,7 @@ namespace HandwritingRecognition.Controllers
                 PassengerCount = 1,
                 TripTimeInSecs = 1140,
                 TripDistance = 3.75f,
-                PaymentType = "CRD",
+                PaymentType = "CSH",
                 FareAmount = 0 // To predict. Actual/Observed = 15.5
             };
             var result = _predictionEnginePool.Predict(modelName: TaxiFareModel.Name, example: input);
