@@ -1,13 +1,11 @@
 using System;
-using System.IO;
-using System.Reflection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.OpenApi.Models;
+using NSwag;
 
 namespace Colors.API
 {
@@ -24,26 +22,22 @@ namespace Colors.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddSwaggerGen(c =>
+            services.AddSwaggerDocument(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo
+                c.PostProcess = doc =>
                 {
-                    Version = "v1",
-                    Title = "Colors API",
-                    Description = "A simple example ASP.NET Core Web API",
-                    Contact = new OpenApiContact
+                    doc.Info.Version = @"v1";
+                    doc.Info.Title = @"Colors API";
+                    doc.Info.Description = @"A simple example ASP.NET Core Web API";
+                    doc.Info.Contact = new OpenApiContact
                     {
-                        Name = "GitHub Repository",
+                        Name = @"GitHub Repository",
                         Email = string.Empty,
-                        Url = new Uri("https://github.com/changhuixu/dotnetlabs/tree/master/ASPNetCoreLabs/HerokuContainer"),
-                    }
-                });
-
-                // Set the comments path for the Swagger JSON and UI.
-                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-                c.IncludeXmlComments(xmlPath);
+                        Url = @"https://github.com/changhuixu/dotnetlabs/tree/master/ASPNetCoreLabs/HerokuContainer"
+                    };
+                };
             });
+
             services.AddHttpsRedirection(options => { options.HttpsPort = 443; });
             services.Configure<ForwardedHeadersOptions>(options =>
             {
@@ -69,11 +63,11 @@ namespace Colors.API
                 app.UseHttpsRedirection();
             }
 
-            app.UseSwagger();
-            app.UseSwaggerUI(c =>
+            app.UseOpenApi();
+            app.UseSwaggerUi3(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Colors API V1");
-                c.RoutePrefix = string.Empty;   // To serve the Swagger UI at the app's root (http://localhost:<port>/), set the RoutePrefix property to an empty string:
+                c.DocExpansion = @"list";
+                c.Path = string.Empty;   // To serve the Swagger UI at the app root (http://localhost:<port>/), set the RoutePrefix property to an empty string.
             });
 
             app.UseRouting();
