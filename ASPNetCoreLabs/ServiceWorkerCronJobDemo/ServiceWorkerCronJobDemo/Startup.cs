@@ -21,21 +21,20 @@ namespace ServiceWorkerCronJobDemo
         {
             services.AddControllers();
 
-            services.AddCronJob<MyCronJobService1>(c =>
+            services.AddCronJob<MyCronJob1>(c =>
             {
                 c.TimeZoneInfo = TimeZoneInfo.Local;
                 c.CronExpression = @"*/5 * * * *";
             });
-            services.AddCronJob<MyCronJobService2>(c =>
+            services.AddCronJob<MyCronJob2>(c =>
             {
                 c.TimeZoneInfo = TimeZoneInfo.Local;
                 c.CronExpression = @"* * * * *";
-                c.ExecuteOnStart = true;
             });
-            services.AddCronJob<MyCronJobService3>(c =>
+            services.AddCronJob<MyCronJob3>(c =>
             {
                 c.TimeZoneInfo = TimeZoneInfo.Local;
-                c.CronExpression = @"15 11 * * *";
+                c.CronExpression = @"50 12 * * *";
             });
         }
 
