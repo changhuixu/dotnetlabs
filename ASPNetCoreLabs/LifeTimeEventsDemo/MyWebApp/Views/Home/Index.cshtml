@@ -1,0 +1,31 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p class="h3" id="message"></p>
+    <div>
+        <p>Click the button below to stop the application.</p>
+        <button id="stopApp" class="btn btn-danger">Stop Application</button>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    (function() {
+        var stopAppBtn = document.getElementById('stopApp');
+        var msg = document.getElementById('message');
+        stopAppBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (this.readyState === 4 && this.status === 200) {
+                    msg.innerHTML = xhr.responseText;
+                }
+            };
+            xhr.open("POST", "home/stop", true);
+            xhr.send(null);
+        });
+    })();
+</script>
