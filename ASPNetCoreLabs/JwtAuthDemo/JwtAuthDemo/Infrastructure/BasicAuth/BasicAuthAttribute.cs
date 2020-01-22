@@ -8,10 +8,7 @@ namespace JwtAuthDemo.Infrastructure.BasicAuth
     {
         public BasicAuthAttribute(string realm = @"My Realm") : base(typeof(BasicAuthFilter))
         {
-            Arguments = new object[]
-            {
-                realm
-            };
+            Arguments = new object[] { realm };
         }
     }
 }

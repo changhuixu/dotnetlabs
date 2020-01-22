@@ -4,7 +4,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Text.Json.Serialization;
-using JwtAuthDemo.Infrastructure.Models;
+using JwtAuthDemo.Infrastructure.Jwt;
 using JwtAuthDemo.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

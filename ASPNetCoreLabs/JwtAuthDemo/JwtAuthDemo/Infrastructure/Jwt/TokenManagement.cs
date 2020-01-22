@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace JwtAuthDemo.Infrastructure.Models
+namespace JwtAuthDemo.Infrastructure.Jwt
 {
     public class TokenManagement
     {

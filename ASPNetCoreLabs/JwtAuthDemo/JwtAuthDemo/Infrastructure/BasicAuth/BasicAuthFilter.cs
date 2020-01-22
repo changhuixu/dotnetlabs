@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Net;
+using System.Net.Http.Headers;
 using System.Text;
 using JwtAuthDemo.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -20,32 +22,46 @@ namespace JwtAuthDemo.Infrastructure.BasicAuth
         }
         public void OnAuthorization(AuthorizationFilterContext context)
         {
-            string authHeader = context.HttpContext.Request.Headers["Authorization"];
-            if (authHeader != null && authHeader.StartsWith("Basic "))
+            try
             {
-                // Get the encoded username and password
-                var encodedUsernamePassword = authHeader.Split(' ', 2, StringSplitOptions.RemoveEmptyEntries)[1]?.Trim();
-                // Decode from Base64 to a string array contains username and password
-                var decodedUsernamePassword = Encoding.UTF8.GetString(Convert.FromBase64String(encodedUsernamePassword)).Split(':', 2);
-                // Get username and password
-                var (username, password) = (decodedUsernamePassword[0], decodedUsernamePassword[1]);
-                // Check if login is correct
-                if (IsAuthorized(context, username, password))
+                string authHeader = context.HttpContext.Request.Headers["Authorization"];
+                if (authHeader != null)
                 {
-                    return;
+                    var authHeaderValue = AuthenticationHeaderValue.Parse(authHeader);
+                    if (authHeaderValue.Scheme.Equals(AuthenticationSchemes.Basic.ToString(), StringComparison.OrdinalIgnoreCase))
+                    {
+                        var credentials = Encoding.UTF8
+                                            .GetString(Convert.FromBase64String(authHeaderValue.Parameter ?? string.Empty))
+                                            .Split(':', 2);
+                        if (credentials.Length == 2)
+                        {
+                            if (IsAuthorized(context, credentials[0], credentials[1]))
+                            {
+                                return;
+                            }
+                        }
+                    }
                 }
-            }
 
-            // Return authentication type (causes browser to show login dialog)
-            context.HttpContext.Response.Headers["WWW-Authenticate"] = $"Basic realm=\"{_realm}\"";
-            // Return unauthorized
-            context.Result = new UnauthorizedResult();
+                ReturnUnauthorizedResult(context);
+            }
+            catch (FormatException)
+            {
+                ReturnUnauthorizedResult(context);
+            }
         }
 
         public bool IsAuthorized(AuthorizationFilterContext context, string username, string password)
         {
             var userService = context.HttpContext.RequestServices.GetRequiredService<IUserService>();
             return userService.IsValidUser(username, password);
+        }
+
+        private void ReturnUnauthorizedResult(AuthorizationFilterContext context)
+        {
+            // Return 401 and a basic authentication challenge (causes browser to show login dialog)
+            context.HttpContext.Response.Headers["WWW-Authenticate"] = $"Basic realm=\"{_realm}\"";
+            context.Result = new UnauthorizedResult();
         }
     }
 }
