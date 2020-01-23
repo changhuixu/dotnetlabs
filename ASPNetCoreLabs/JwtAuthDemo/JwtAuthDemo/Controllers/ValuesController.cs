@@ -24,7 +24,7 @@ namespace JwtAuthDemo.Controllers
         public IEnumerable<int> Get()
         {
             var rng = new Random();
-            return Enumerable.Range(1, 5).Select(x => rng.Next(0, 100));
+            return Enumerable.Range(1, 3).Select(x => rng.Next(0, 100));
         }
 
         [HttpGet("jwt")]
@@ -33,18 +33,27 @@ namespace JwtAuthDemo.Controllers
         {
             _logger.LogInformation("jwt auth");
             var rng = new Random();
-            return Enumerable.Range(1, 5).Select(x => rng.Next(0, 100));
+            return Enumerable.Range(1, 10).Select(x => rng.Next(0, 100));
         }
 
 
         [HttpGet("basic")]
-        [BasicAuth]
-        // [BasicAuth("my-realm")] --> You can optionally provide a specific realm.
+        [BasicAuth] // You can optionally provide a specific realm --> [BasicAuth("my-realm")]
         public IEnumerable<int> BasicAuth()
         {
             _logger.LogInformation("basic auth");
             var rng = new Random();
-            return Enumerable.Range(1, 5).Select(x => rng.Next(0, 100));
+            return Enumerable.Range(1, 10).Select(x => rng.Next(0, 100));
+        }
+
+        [HttpGet("basic-logout")]
+        [BasicAuth]
+        public IActionResult BasicAuthLogout()
+        {
+            _logger.LogInformation("basic auth logout");
+            // NOTE: there's no good way to log out basic authentication. This method is a hack.
+            HttpContext.Response.Headers["WWW-Authenticate"] = "Basic realm=\"My Realm\"";
+            return new UnauthorizedResult();
         }
     }
 }
