@@ -1,6 +1,5 @@
 using System.Text;
-using JwtAuthDemo.Infrastructure;
-using JwtAuthDemo.Infrastructure.Models;
+using JwtAuthDemo.Infrastructure.Jwt;
 using JwtAuthDemo.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
