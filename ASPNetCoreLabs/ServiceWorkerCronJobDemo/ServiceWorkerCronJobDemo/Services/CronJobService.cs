@@ -33,9 +33,18 @@ namespace ServiceWorkerCronJobDemo.Services
                 _timer = new System.Timers.Timer(delay.TotalMilliseconds);
                 _timer.Elapsed += async (sender, args) =>
                 {
-                    _timer.Stop();  // reset timer
-                    await DoWork(cancellationToken);
-                    await ScheduleJob(cancellationToken);    // reschedule next
+                    _timer.Dispose();  // reset and dispose timer
+                    _timer = null;
+
+                    if (!cancellationToken.IsCancellationRequested)
+                    {
+                        await DoWork(cancellationToken);
+                    }
+
+                    if (!cancellationToken.IsCancellationRequested)
+                    {
+                        await ScheduleJob(cancellationToken);    // reschedule next
+                    }
                 };
                 _timer.Start();
             }
