@@ -6,22 +6,22 @@ namespace Demo.Infrastructure
 {
     public class MyConfigurationProvider : ConfigurationProvider
     {
-        private readonly MyConfigurationOptions _options;
+        public MyConfigurationSource Source { get; }
 
-        public MyConfigurationProvider(MyConfigurationOptions options)
+        public MyConfigurationProvider(MyConfigurationSource source)
         {
-            _options = options;
+            Source = source;
         }
 
         public override void Load()
         {
-            using var conn = new SQLiteConnection(_options.ConnectionString);
+            using var conn = new SQLiteConnection(Source.ConnectionString);
             conn.Open();
-            using var cmd = new SQLiteCommand(_options.Query, conn);
+            using var cmd = new SQLiteCommand(Source.Query, conn);
             using var reader = cmd.ExecuteReader();
             while (reader.Read())
             {
-                Data.Add(reader.GetString(0), reader.GetString(1));
+                Set(reader.GetString(0), reader.GetString(1));
             }
         }
     }
@@ -34,16 +34,18 @@ namespace Demo.Infrastructure
 
     public class MyConfigurationSource : IConfigurationSource
     {
-        private readonly MyConfigurationOptions _options;
+        public string ConnectionString { get; set; }
+        public string Query { get; set; }
 
         public MyConfigurationSource(MyConfigurationOptions options)
         {
-            _options = options;
+            ConnectionString = options.ConnectionString;
+            Query = options.Query;
         }
 
         public IConfigurationProvider Build(IConfigurationBuilder builder)
         {
-            return new MyConfigurationProvider(_options);
+            return new MyConfigurationProvider(this);
         }
     }
 
@@ -51,9 +53,10 @@ namespace Demo.Infrastructure
     {
         public static IConfigurationBuilder AddMyConfiguration(this IConfigurationBuilder configuration, Action<MyConfigurationOptions> options)
         {
-            var myConfigsOptions = new MyConfigurationOptions();
-            options(myConfigsOptions);
-            configuration.Add(new MyConfigurationSource(myConfigsOptions));
+            _ = options ?? throw new ArgumentNullException(nameof(options));
+            var myConfigurationOptions = new MyConfigurationOptions();
+            options(myConfigurationOptions);
+            configuration.Add(new MyConfigurationSource(myConfigurationOptions));
             return configuration;
         }
     }
