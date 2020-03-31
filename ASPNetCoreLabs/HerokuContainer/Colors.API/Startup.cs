@@ -1,11 +1,13 @@
 using System;
+using System.IO;
+using System.Reflection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using NSwag;
+using Microsoft.OpenApi.Models;
 
 namespace Colors.API
 {
@@ -22,20 +24,23 @@ namespace Colors.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddSwaggerDocument(c =>
+            services.AddSwaggerGen(c =>
             {
-                c.PostProcess = doc =>
+                c.SwaggerDoc("v1", new OpenApiInfo
                 {
-                    doc.Info.Version = @"v1";
-                    doc.Info.Title = @"Colors API";
-                    doc.Info.Description = @"A simple example ASP.NET Core Web API";
-                    doc.Info.Contact = new OpenApiContact
+                    Title = "Colors API",
+                    Version = "v1",
+                    Description = "A simple example ASP.NET Core Web API",
+                    Contact = new OpenApiContact
                     {
                         Name = @"GitHub Repository",
                         Email = string.Empty,
-                        Url = @"https://github.com/changhuixu/dotnetlabs/tree/master/ASPNetCoreLabs/HerokuContainer"
-                    };
-                };
+                        Url = new Uri("https://github.com/changhuixu/dotnetlabs/tree/master/ASPNetCoreLabs/HerokuContainer")
+                    }
+                });
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
             });
 
             services.AddHttpsRedirection(options => { options.HttpsPort = 443; });
@@ -63,15 +68,14 @@ namespace Colors.API
                 app.UseHttpsRedirection();
             }
 
-            app.UseOpenApi();
-            app.UseSwaggerUi3(c =>
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
             {
-                c.DocExpansion = @"list";
-                c.Path = string.Empty;   // To serve the Swagger UI at the app root (http://localhost:<port>/), set the RoutePrefix property to an empty string.
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+                c.RoutePrefix = string.Empty;
             });
 
             app.UseRouting();
-
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
