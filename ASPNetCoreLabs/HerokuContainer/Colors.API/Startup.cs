@@ -2,7 +2,6 @@ using System;
 using System.IO;
 using System.Reflection;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -28,9 +27,10 @@ namespace Colors.API
             {
                 c.SwaggerDoc("v1", new OpenApiInfo
                 {
-                    Title = "Colors API",
                     Version = "v1",
+                    Title = "ToDo API",
                     Description = "A simple example ASP.NET Core Web API",
+                    TermsOfService = new Uri("https://example.com/terms"),
                     Contact = new OpenApiContact
                     {
                         Name = @"GitHub Repository",
@@ -54,7 +54,7 @@ namespace Colors.API
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -72,6 +72,7 @@ namespace Colors.API
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+                c.DocumentTitle = "Todo APIs";
                 c.RoutePrefix = string.Empty;
             });
 

@@ -25,7 +25,7 @@ namespace Colors.API.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = "Download a File by FileID")]
         public IActionResult Download(int id)
         {
             return File(Encoding.ASCII.GetBytes("hello world"), "text/plain", $"test-{id}.txt");
@@ -41,7 +41,7 @@ namespace Colors.API.Controllers
         {
             _logger.LogInformation($"validating the file {file.FileName}");
             _logger.LogInformation("saving file");
-            await Task.Delay(2000);
+            await Task.Delay(2000); // validate file type/format/size, scan virus, save it to a storage
             _logger.LogInformation("file saved.");
         }
 

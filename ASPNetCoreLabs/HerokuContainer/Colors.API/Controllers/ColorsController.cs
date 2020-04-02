@@ -166,6 +166,7 @@ namespace Colors.API.Controllers
         ///            "ratio": 1.372
         ///        }
         ///
+        /// [Calculation Formula](https://www.w3.org/TR/AERT/#color-contrast)
         /// </remarks>
         /// <param name="fc">Foreground Color: a HEX number</param>
         /// <param name="bc">Background Color: a HEX number</param>
