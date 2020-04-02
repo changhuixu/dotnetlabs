@@ -40,7 +40,7 @@ namespace Colors.API
                 });
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-                c.IncludeXmlComments(xmlPath);
+                c.IncludeXmlComments(xmlPath, true);
             });
 
             services.AddHttpsRedirection(options => { options.HttpsPort = 443; });
