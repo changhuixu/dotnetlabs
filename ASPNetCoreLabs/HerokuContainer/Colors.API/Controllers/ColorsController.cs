@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Globalization;
 using Colors.API.Models;
 using Colors.API.Services;
@@ -10,6 +9,7 @@ using Microsoft.Extensions.Logging;
 namespace Colors.API.Controllers
 {
     [ApiController]
+    [Produces("application/json")]
     [Route("api/[controller]")]
     public class ColorsController : ControllerBase
     {
@@ -21,7 +21,7 @@ namespace Colors.API.Controllers
         }
 
         /// <summary>
-        ///     Get the color object from a HEX color format.
+        /// Get the color object from a HEX color format.
         /// </summary>
         /// <remarks>
         /// Sample request:
@@ -48,7 +48,7 @@ namespace Colors.API.Controllers
         /// <response code="400">If any color string in the query parameters is invalid.</response>
         [HttpGet("{color}/argb")]
         [ProducesResponseType(typeof(Color), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(Dictionary<string, string[]>), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public ActionResult<Color> GetArgb(string color)
         {
             if (!int.TryParse(color, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out _))
@@ -62,7 +62,7 @@ namespace Colors.API.Controllers
 
 
         /// <summary>
-        ///     Get the luminance of a color.
+        /// Get the luminance of a color.
         /// </summary>
         /// <remarks>
         /// Sample request:
@@ -79,7 +79,7 @@ namespace Colors.API.Controllers
         /// <response code="400">If any color string in the query parameters is invalid.</response>
         [HttpGet("{color}/luminance")]
         [ProducesResponseType(typeof(double), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(Dictionary<string, string[]>), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public ActionResult<double> GetLuminance(string color)
         {
             if (!int.TryParse(color, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out _))
@@ -93,7 +93,7 @@ namespace Colors.API.Controllers
 
 
         /// <summary>
-        ///     Get the brightness of a color.
+        /// Get the brightness of a color.
         /// </summary>
         /// <remarks>
         /// Sample request:
@@ -110,7 +110,7 @@ namespace Colors.API.Controllers
         /// <response code="400">If any color string in the query parameters is invalid.</response>
         [HttpGet("{color}/brightness")]
         [ProducesResponseType(typeof(double), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(Dictionary<string, string[]>), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public ActionResult<double> GetBrightness(string color)
         {
             if (!int.TryParse(color, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out _))
@@ -124,7 +124,7 @@ namespace Colors.API.Controllers
 
 
         /// <summary>
-        ///     Computes the contrast ratio between two colors.
+        /// Computes the contrast ratio between two colors.
         /// </summary>
         /// <remarks>
         /// Sample request:
@@ -170,7 +170,7 @@ namespace Colors.API.Controllers
         /// <response code="400">If any color string in the query parameters is invalid.</response>
         [HttpGet("contrast-ratio")]
         [ProducesResponseType(typeof(ColorContrastRatio), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(Dictionary<string, string[]>), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public ActionResult<ColorContrastRatio> GetContrastRatio(string fc, string bc)
         {
             if (string.IsNullOrWhiteSpace(fc))
@@ -203,7 +203,7 @@ namespace Colors.API.Controllers
 
 
         /// <summary>
-        ///     Computes the Brightness Difference between two colors.
+        /// Computes the Brightness Difference between two colors.
         /// </summary>
         /// <remarks>
         /// Sample request:
@@ -250,7 +250,7 @@ namespace Colors.API.Controllers
         /// <response code="400">If any color string in the query parameters is invalid.</response>
         [HttpGet("brightness-difference")]
         [ProducesResponseType(typeof(ColorBrightnessDifference), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(Dictionary<string, string[]>), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public ActionResult<ColorBrightnessDifference> GetBrightnessDifference(string fc, string bc)
         {
             if (string.IsNullOrWhiteSpace(fc))
@@ -283,7 +283,7 @@ namespace Colors.API.Controllers
 
 
         /// <summary>
-        ///     Computes the Color Difference between two colors.
+        /// Computes the Color Difference between two colors.
         /// </summary>
         /// <remarks>
         /// Sample request:
@@ -330,7 +330,7 @@ namespace Colors.API.Controllers
         /// <response code="400">If any color string in the query parameters is invalid.</response>
         [HttpGet("color-difference")]
         [ProducesResponseType(typeof(ColorDifference), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(Dictionary<string, string[]>), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public ActionResult<ColorDifference> GetColorDifference(string fc, string bc)
         {
             if (string.IsNullOrWhiteSpace(fc))
