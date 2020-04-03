@@ -12,6 +12,7 @@ namespace Colors.API.Controllers
     /// A set of APIs to convert colors and compute color metrics
     /// </summary>
     [ApiController]
+    [ApiExplorerSettings(GroupName = "v1")]
     [Produces("application/json")]
     [Route("api/[controller]")]
     public class ColorsController : ControllerBase
@@ -166,11 +167,14 @@ namespace Colors.API.Controllers
         ///            "ratio": 1.372
         ///        }
         ///
-        /// [Calculation Formula](https://www.w3.org/TR/AERT/#color-contrast)
         /// </remarks>
         /// <param name="fc">Foreground Color: a HEX number</param>
         /// <param name="bc">Background Color: a HEX number</param>
-        /// <response code="200">Returns the ColorContrastRatio object</response>
+        /// <response code="200">
+        /// Returns the ColorContrastRatio object
+        ///
+        /// The contrast ratio is calculated based on [this formula](https://www.w3.org/TR/AERT/#color-contrast)
+        /// </response>
         /// <response code="400">If any color string in the query parameters is invalid.</response>
         [HttpGet("contrast-ratio")]
         [ProducesResponseType(typeof(ColorContrastRatio), StatusCodes.Status200OK)]

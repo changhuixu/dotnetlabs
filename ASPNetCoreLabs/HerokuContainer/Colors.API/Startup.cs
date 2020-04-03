@@ -38,6 +38,8 @@ namespace Colors.API
                         Url = new Uri("https://github.com/changhuixu/dotnetlabs/tree/master/ASPNetCoreLabs/HerokuContainer")
                     }
                 });
+                c.SwaggerDoc("v2", new OpenApiInfo { Version = "v1.2", Title = "File Upload API" });
+
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath, true);
@@ -72,7 +74,9 @@ namespace Colors.API
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+                c.SwaggerEndpoint("/swagger/v2/swagger.json", "v2");
                 c.DocumentTitle = "Todo APIs";
+                c.DefaultModelsExpandDepth(0);
                 c.RoutePrefix = string.Empty;
             });
 

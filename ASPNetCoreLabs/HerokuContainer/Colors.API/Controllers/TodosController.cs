@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using Microsoft.AspNetCore.Http;
@@ -139,6 +139,30 @@ namespace Colors.API.Controllers
         /// <summary>
         /// Deletes a TodoItem
         /// </summary>
+        /// <remarks>
+        ///
+        /// # Header 1
+        ///
+        /// ## Header 2
+        /// 
+        /// 1. Item 1
+        /// 1. Item 2
+        ///
+        /// * Item 1
+        /// * Item 2
+        ///
+        /// inline `code`
+        ///
+        /// [link](#)
+        ///
+        /// ### Table
+        ///
+        /// Column 1 | Column 2 | Column 2
+        /// -------- | -------- | ---------
+        /// Value 1  | Value 2  | Value 3
+        ///
+        /// <input type="text"></input>
+        /// </remarks>
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpDelete("{id}")]
@@ -155,6 +179,9 @@ namespace Colors.API.Controllers
         }
     }
 
+    /// <summary>
+    /// A TodoItem tracks a task
+    /// </summary>
     public class TodoItem
     {
         /// <summary>
@@ -169,12 +196,13 @@ namespace Colors.API.Controllers
         /// <example>
         ///     feed fish
         /// </example>
-        [Required] 
+        [Required]
         public string Name { get; set; }
 
         /// <summary>
-        /// The task is completed or not. Boolean. Default: <code>false</code>.
+        /// The task is completed or not. Default: <code>false</code>.
         /// </summary>
+        /// <example>false</example>
         public bool IsComplete { get; set; }
     }
 }

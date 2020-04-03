@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 namespace Colors.API.Controllers
 {
     [ApiController]
-    [ApiExplorerSettings(IgnoreApi = true)]
+    [ApiExplorerSettings(GroupName = "v2")]
     [Produces("application/json")]
     [Route("api/[controller]")]
     public class FilesController : ControllerBase
