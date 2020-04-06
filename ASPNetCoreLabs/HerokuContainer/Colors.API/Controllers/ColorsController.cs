@@ -8,7 +8,11 @@ using Microsoft.Extensions.Logging;
 
 namespace Colors.API.Controllers
 {
+    /// <summary>
+    /// A set of APIs to convert colors and compute color metrics
+    /// </summary>
     [ApiController]
+    [ApiExplorerSettings(GroupName = "v1")]
     [Produces("application/json")]
     [Route("api/[controller]")]
     public class ColorsController : ControllerBase
@@ -43,7 +47,7 @@ namespace Colors.API.Controllers
         ///     }
         ///
         /// </remarks>
-        /// <param name="color">Color: a HEX number</param>
+        /// <param name="color"><strong>Color</strong>: a HEX number. <em>Example: 00FF00</em></param>
         /// <response code="200">Returns the color object.</response>
         /// <response code="400">If any color string in the query parameters is invalid.</response>
         [HttpGet("{color}/argb")]
@@ -166,7 +170,11 @@ namespace Colors.API.Controllers
         /// </remarks>
         /// <param name="fc">Foreground Color: a HEX number</param>
         /// <param name="bc">Background Color: a HEX number</param>
-        /// <response code="200">Returns the ColorContrastRatio object</response>
+        /// <response code="200">
+        /// Returns the ColorContrastRatio object
+        ///
+        /// The contrast ratio is calculated based on [this formula](https://www.w3.org/TR/AERT/#color-contrast)
+        /// </response>
         /// <response code="400">If any color string in the query parameters is invalid.</response>
         [HttpGet("contrast-ratio")]
         [ProducesResponseType(typeof(ColorContrastRatio), StatusCodes.Status200OK)]

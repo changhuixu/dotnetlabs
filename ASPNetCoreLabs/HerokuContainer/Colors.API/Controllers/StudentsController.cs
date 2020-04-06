@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -6,6 +7,9 @@ using Microsoft.Extensions.Logging;
 
 namespace Colors.API.Controllers
 {
+    /// <summary>
+    /// An example controller for testing <code>multipart/form-data</code> submission
+    /// </summary>
     [ApiController]
     [Produces("application/json")]
     [Route("api/[controller]")]
@@ -63,6 +67,22 @@ namespace Colors.API.Controllers
             await Task.Delay(1500);
             return true;
         }
+
+        /// <summary>
+        /// Get students by residential type
+        /// </summary>
+        /// <param name="residentialType">Residential Type. **Default**: <code>InState</code>.</param>
+        /// <returns></returns>
+        [HttpGet("")]
+        public ActionResult GetStudentsByResidentialType(ResidentialType residentialType = ResidentialType.InState)
+        {
+            _logger.LogInformation($"query {residentialType} students");
+            if (residentialType == ResidentialType.International)
+            {
+                _logger.LogInformation("found 10000 students.");
+            }
+            return Ok();
+        }
     }
 
     public class StudentForm
@@ -75,5 +95,13 @@ namespace Colors.API.Controllers
     {
         public int StudentId { get; set; }
         public int FormId { get; set; }
+    }
+
+    [JsonConverter(typeof(JsonStringEnumConverter))]
+    public enum ResidentialType
+    {
+        InState,
+        OutOfState,
+        International
     }
 }

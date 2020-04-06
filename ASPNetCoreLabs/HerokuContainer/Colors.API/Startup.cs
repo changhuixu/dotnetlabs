@@ -2,7 +2,6 @@ using System;
 using System.IO;
 using System.Reflection;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -28,9 +27,10 @@ namespace Colors.API
             {
                 c.SwaggerDoc("v1", new OpenApiInfo
                 {
-                    Title = "Colors API",
                     Version = "v1",
+                    Title = "ToDo API",
                     Description = "A simple example ASP.NET Core Web API",
+                    TermsOfService = new Uri("https://example.com/terms"),
                     Contact = new OpenApiContact
                     {
                         Name = @"GitHub Repository",
@@ -38,9 +38,11 @@ namespace Colors.API
                         Url = new Uri("https://github.com/changhuixu/dotnetlabs/tree/master/ASPNetCoreLabs/HerokuContainer")
                     }
                 });
+                c.SwaggerDoc("v2", new OpenApiInfo { Version = "v1.2", Title = "File Upload API" });
+
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-                c.IncludeXmlComments(xmlPath);
+                c.IncludeXmlComments(xmlPath, true);
             });
 
             services.AddHttpsRedirection(options => { options.HttpsPort = 443; });
@@ -54,7 +56,7 @@ namespace Colors.API
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -72,6 +74,9 @@ namespace Colors.API
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+                c.SwaggerEndpoint("/swagger/v2/swagger.json", "v2");
+                c.DocumentTitle = "Todo APIs";
+                c.DefaultModelsExpandDepth(0);
                 c.RoutePrefix = string.Empty;
             });
 
