@@ -12,8 +12,9 @@ namespace ClassLibrary.UnitTests.Helpers
         }
         public static void VerifyLog<T>(this Mock<ILogger<T>> loggerMock, LogLevel level, string message, Times times, string failMessage = null)
         {
-            loggerMock.Verify(l => l.Log(level, It.IsAny<EventId>(), It.Is<object>(o => o.ToString() == message), null,
-                    It.IsAny<Func<object, Exception, string>>()),
+            loggerMock.Verify(l => l.Log(level, It.IsAny<EventId>(),
+                    It.Is<It.IsAnyType>((o, _) => o.ToString() == message), It.IsAny<Exception>(),
+                    It.Is<Func<It.IsAnyType, Exception, string>>((v, t) => true)),
                 times, failMessage);
         }
     }
