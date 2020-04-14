@@ -21,11 +21,14 @@ namespace ServiceWorkerCronJobDemo
         {
             services.AddControllers();
 
+            services.AddScoped<IMyScopedService, MyScopedService>();
+
             services.AddCronJob<MyCronJob1>(c =>
             {
                 c.TimeZoneInfo = TimeZoneInfo.Local;
                 c.CronExpression = @"*/5 * * * *";
             });
+            // MyCronJob2 calls the scoped service MyScopedService
             services.AddCronJob<MyCronJob2>(c =>
             {
                 c.TimeZoneInfo = TimeZoneInfo.Local;
