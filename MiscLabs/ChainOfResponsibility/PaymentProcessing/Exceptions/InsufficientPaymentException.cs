@@ -2,7 +2,8 @@
 
 namespace PaymentProcessing.Exceptions
 {
-    public class InsufficientPaymentException : Exception
+    [Serializable]
+    public class InsufficientPaymentException : ArgumentException
     {
     }
 }
