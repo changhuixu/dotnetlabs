@@ -9,20 +9,13 @@ namespace StringOperations.DbContext
     public class MyDbContext : Microsoft.EntityFrameworkCore.DbContext
     {
         public const string DbFileName = @"customers.db";
-        public static readonly ILoggerFactory MyLoggerFactory
-            = LoggerFactory.Create(builder =>
-            {
-                builder.AddFilter((category, level) =>
-                        category == DbLoggerCategory.Database.Command.Name
-                        && level == LogLevel.Information)
-                    .AddConsole();
-            });
+
         public DbSet<Customer> Customers { get; protected set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder = optionsBuilder
-                .UseLoggerFactory(MyLoggerFactory)
+                .UseLoggerFactory(Program.MyLoggerFactory)
                 .UseSqlite($"Data source={DbFileName}",
                     options => { options.MigrationsAssembly(Assembly.GetExecutingAssembly().FullName); });
             base.OnConfiguring(optionsBuilder);
