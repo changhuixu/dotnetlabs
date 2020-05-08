@@ -37,7 +37,7 @@ namespace UserRegistration.Models
                     .SetNext(new DepartmentValidationHandler());
                 handler.Handle(this);
             }
-            catch (UserValidationException ex)
+            catch (UserValidationException)
             {
                 return false;
             }
