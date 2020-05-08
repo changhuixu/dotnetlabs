@@ -8,8 +8,8 @@ using StringOperations.DbContext;
 
 namespace StringOperations.Migrations
 {
-    [DbContext(typeof(MyDbContext))]
-    [Migration("20200506182233_Init")]
+    [DbContext(typeof(MySqliteDbContext))]
+    [Migration("20200508152238_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

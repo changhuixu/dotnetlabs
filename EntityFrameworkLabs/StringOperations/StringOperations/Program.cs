@@ -24,11 +24,13 @@ namespace StringOperations
 
         private static void Main()
         {
-            InitializeAndSeedDatabase();
+            //InitializeAndSeedSqliteDatabase();    // only need it for SQLite, the first time for seeding data
+            using var dbContext = new MySqliteDbContext();
+
+            //InitializeAndSeedSqlServerDatabase(); // only need it for SQL Server, the first time for seeding data
+            //using var dbContext = new MySqlServerDbContext();
 
             Logger.LogInformation("\r\n========================================================================\r\n");
-
-            using var dbContext = new MyDbContext();
 
             //var s0 = dbContext.Customers.Where(x=> x.LastName.StartsWith("pe", StringComparison.CurrentCultureIgnoreCase)).ToList();
             var startsWith1 = dbContext.Customers.Where(x => x.LastName.StartsWith("pe")).Select(x => x.LastName).ToList();
@@ -91,11 +93,25 @@ namespace StringOperations
             Logger.LogInformation("\r\n========================================================================\r\n");
         }
 
-        private static void InitializeAndSeedDatabase()
+        private static void InitializeAndSeedSqliteDatabase()
         {
-            MyDbContext.EnsureDatabaseIsCleaned();
-            using var dbContext = new MyDbContext();
+            MySqliteDbContext.EnsureDatabaseIsCleaned();
+            using var dbContext = new MySqliteDbContext();
             dbContext.Database.Migrate();
+
+            var seed = JsonSerializer.Deserialize<Customer[]>(
+                File.ReadAllText(Path.Combine(@"customers.json")),
+                new JsonSerializerOptions
+                {
+                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+                });
+            dbContext.Customers.AddRange(seed);
+            dbContext.SaveChanges();
+        }
+
+        private static void InitializeAndSeedSqlServerDatabase()
+        {
+            using var dbContext = new MySqlServerDbContext();
 
             var seed = JsonSerializer.Deserialize<Customer[]>(
                 File.ReadAllText(Path.Combine(@"customers.json")),

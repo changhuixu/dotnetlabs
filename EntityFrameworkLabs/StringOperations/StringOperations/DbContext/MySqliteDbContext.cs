@@ -1,12 +1,11 @@
 ﻿using System.IO;
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using StringOperations.Models;
 
 namespace StringOperations.DbContext
 {
-    public class MyDbContext : Microsoft.EntityFrameworkCore.DbContext
+    public class MySqliteDbContext : Microsoft.EntityFrameworkCore.DbContext
     {
         public const string DbFileName = @"customers.db";
 
