@@ -1,0 +1,16 @@
+version: "3"
+services:
+  api:
+    build: .
+    image: aspnetapp
+    ports:
+      - "44392:443"
+      - "54023:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ASPNETCORE_HTTPS_PORT=44392
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=mypassword123
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+    volumes:
+      - ./https/aspnetapp.pfx:/https/aspnetapp.pfx:ro
