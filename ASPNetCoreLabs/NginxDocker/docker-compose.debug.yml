@@ -1,0 +1,15 @@
+version: '3.4'
+
+services:
+  webapp:
+    image: mcr.microsoft.com/dotnet/core/samples:aspnetapp
+    ports:
+      - 80
+      - 443
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=mypassword123
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+    volumes:
+      - ./https/aspnetapp.pfx:/https/aspnetapp.pfx:ro

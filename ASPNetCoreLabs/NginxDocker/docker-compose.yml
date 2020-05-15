@@ -1,0 +1,16 @@
+version: "3"
+services:
+    nginx:
+        build: ./nginx
+        ports:
+            - "80:80"
+            - "443:443"
+        restart: always
+
+    api:
+        build: ./src
+        ports:
+            - "5000"
+        depends_on: 
+            - nginx
+        restart: always
