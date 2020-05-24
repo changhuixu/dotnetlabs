@@ -14,7 +14,7 @@ namespace Colors.API.Controllers
     [Route("api/[controller]")]
     public class TodosController : ControllerBase
     {
-        private readonly List<TodoItem> _todoItems = new List<TodoItem>
+        private static readonly List<TodoItem> TodoItems = new List<TodoItem>
         {
             new TodoItem
             {
@@ -57,7 +57,7 @@ namespace Colors.API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<TodoItem> GetTodoItem(int id)
         {
-            var todoItem = _todoItems.FirstOrDefault(x => x.Id == id);
+            var todoItem = TodoItems.FirstOrDefault(x => x.Id == id);
 
             if (todoItem == null)
             {
@@ -106,7 +106,7 @@ namespace Colors.API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public ActionResult<TodoItem> Create(TodoItem item)
         {
-            _todoItems.Add(item);
+            TodoItems.Add(item);
             return CreatedAtAction(nameof(GetTodoItem), new { id = item.Id }, item);
         }
 
@@ -124,7 +124,7 @@ namespace Colors.API.Controllers
                 return BadRequest();
             }
 
-            var todo = _todoItems.FirstOrDefault(x => x.Id == id);
+            var todo = TodoItems.FirstOrDefault(x => x.Id == id);
             if (todo == null)
             {
                 return NotFound();
@@ -168,13 +168,13 @@ namespace Colors.API.Controllers
         [HttpDelete("{id}")]
         public ActionResult<TodoItem> DeleteTodoItem(int id)
         {
-            var todoItem = _todoItems.FirstOrDefault(x => x.Id == id);
+            var todoItem = TodoItems.FirstOrDefault(x => x.Id == id);
             if (todoItem == null)
             {
                 return NotFound();
             }
 
-            _todoItems.Remove(todoItem);
+            TodoItems.Remove(todoItem);
             return todoItem;
         }
     }
