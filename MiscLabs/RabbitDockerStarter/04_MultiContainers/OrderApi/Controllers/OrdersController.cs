@@ -43,16 +43,16 @@ namespace OrderApi.Controllers
         {
             var newOrder = new Order
             {
-                Id = Orders.Max(x => x.Id) + 1,
+                Id = Orders.Select(x => x.Id).DefaultIfEmpty().Max() + 1,
                 Email = request.Email
             };
             Orders.Add(newOrder);
             var payload = JsonSerializer.Serialize(newOrder);
             _logger.LogInformation($"New order created: {payload}");
 
-            _rabbitMqClient.Publish("emails", "order.created", payload);
+            _rabbitMqClient.Publish("ordering", "order.created", payload);
 
-            return CreatedAtAction(nameof(GetById), newOrder.Id, newOrder);
+            return CreatedAtAction(nameof(GetById), new { id = newOrder.Id }, newOrder);
         }
     }
 

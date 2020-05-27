@@ -9,6 +9,7 @@ namespace OrderApi.RabbitMQ
         private readonly ConnectionFactory _connectionFactory;
         private readonly IConnection _connection;
         private readonly IModel _channel;
+
         public RabbitMqClient()
         {
             var rabbitHostName = Environment.GetEnvironmentVariable("RABBIT_HOSTNAME");

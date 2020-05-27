@@ -3,6 +3,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using EmailWorker.Models;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
@@ -17,6 +18,7 @@ namespace EmailWorker
         private ConnectionFactory _connectionFactory;
         private IConnection _connection;
         private IModel _channel;
+        private const string QueueName = "ordering.emailworker";
 
         public Worker(ILogger<Worker> logger)
         {
@@ -26,8 +28,6 @@ namespace EmailWorker
         public override Task StartAsync(CancellationToken cancellationToken)
         {
             var rabbitHostName = Environment.GetEnvironmentVariable("RABBIT_HOSTNAME");
-            _logger.LogInformation(rabbitHostName);
-
             _connectionFactory = new ConnectionFactory
             {
                 HostName = rabbitHostName ?? "localhost",
@@ -38,19 +38,18 @@ namespace EmailWorker
             };
             _connection = _connectionFactory.CreateConnection();
             _channel = _connection.CreateModel();
+            _channel.QueueDeclarePassive(QueueName);
+            _channel.BasicQos(0, 1, false);
+            _logger.LogInformation($"Queue [{QueueName}] is waiting for messages.");
+
             return base.StartAsync(cancellationToken);
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
             stoppingToken.ThrowIfCancellationRequested();
 
-            const string queueName = "emailworker";
-            _channel.QueueDeclarePassive(queueName);
-            _logger.LogInformation($"Queue [{queueName}] is waiting for messages.");
-
-            var messageCount = _channel.MessageCount(queueName);
+            var messageCount = _channel.MessageCount(QueueName);
             if (messageCount > 0)
             {
                 _logger.LogInformation($"\tDetected {messageCount} message(s).");
@@ -65,25 +64,37 @@ namespace EmailWorker
                     return;
                 }
 
+                var t = DateTimeOffset.FromUnixTimeMilliseconds(ea.BasicProperties.Timestamp.UnixTime);
+                _logger.LogInformation($"{t.LocalDateTime:O} ID=[{ea.BasicProperties.MessageId}]");
+                var message = Encoding.UTF8.GetString(ea.Body.ToArray());
+                _logger.LogInformation($"Processing msg: '{message}'.");
+
                 try
                 {
-                    var t = DateTimeOffset.FromUnixTimeMilliseconds(ea.BasicProperties.Timestamp.UnixTime);
-                    _logger.LogInformation($"{t.LocalDateTime:O} ID=[{ea.BasicProperties.MessageId}]");
-                    var message = Encoding.UTF8.GetString(ea.Body.ToArray());
-                    _logger.LogInformation($"\tProcessing order: '{message}'.");
+                    var order = JsonSerializer.Deserialize<PurchaseOrder>(message);
+                    _logger.LogInformation($"Sending order #{order.Id} confirmation email to [{order.Email}].");
 
-                    await Task.Delay(new Random().Next(1, 3) * 1000, stoppingToken);
-                    var order = JsonSerializer.Deserialize<Order>(message);
-                    _logger.LogInformation($"\tOrder #[{order.Id}] confirmation sent to [{order.Email}].");
+                    await Task.Delay(new Random().Next(1, 3) * 1000, stoppingToken); // simulate an async email process
 
+                    _logger.LogInformation($"Order #{order.Id} confirmation email sent.");
                     _channel.BasicAck(ea.DeliveryTag, false);
+                }
+                catch (JsonException)
+                {
+                    _logger.LogError($"JSON Parse Error: '{message}'.");
+                    _channel.BasicNack(ea.DeliveryTag, false, false);
                 }
                 catch (AlreadyClosedException)
                 {
                     _logger.LogInformation("RabbitMQ is closed!");
                 }
+                catch (Exception e)
+                {
+                    _logger.LogError(default, e, e.Message);
+                }
             };
-            _channel.BasicConsume(queue: queueName, autoAck: false, consumer: consumer);
+
+            _channel.BasicConsume(queue: QueueName, autoAck: false, consumer: consumer);
 
             await Task.CompletedTask;
         }
@@ -92,12 +103,7 @@ namespace EmailWorker
         {
             await base.StopAsync(cancellationToken);
             _connection.Close();
+            _logger.LogInformation("RabbitMQ connection is closed.");
         }
-    }
-
-    public class Order
-    {
-        public int Id { get; set; }
-        public string Email { get; set; }
     }
 }
