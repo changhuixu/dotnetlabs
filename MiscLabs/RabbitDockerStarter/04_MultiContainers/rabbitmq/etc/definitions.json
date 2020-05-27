@@ -34,7 +34,7 @@
       "user": "ops0",
       "vhost": "/",
       "configure": "",
-      "write": "emails*",
+      "write": "ordering*",
       "read": ".*"
     },
     {
@@ -42,21 +42,21 @@
       "vhost": "/",
       "configure": "",
       "write": "",
-      "read": "emailworker"
+      "read": "ordering.emailworker"
     }
   ],
   "topic_permissions": [
     {
       "user": "ops0",
       "vhost": "/",
-      "exchange": "emails",
+      "exchange": "ordering",
       "write": ".*",
       "read": ".*"
     },
     {
       "user": "ops1",
       "vhost": "/",
-      "exchange": "emails",
+      "exchange": "ordering",
       "write": "order.*",
       "read": "order.*"
     },
@@ -79,7 +79,7 @@
   "policies": [],
   "queues": [
     {
-      "name": "emailworker",
+      "name": "ordering.emailworker",
       "vhost": "/",
       "durable": true,
       "auto_delete": false,
@@ -88,7 +88,7 @@
   ],
   "exchanges": [
     {
-      "name": "emails",
+      "name": "ordering",
       "vhost": "/",
       "type": "topic",
       "durable": true,
@@ -99,9 +99,9 @@
   ],
   "bindings": [
     {
-      "source": "emails",
+      "source": "ordering",
       "vhost": "/",
-      "destination": "emailworker",
+      "destination": "ordering.emailworker",
       "destination_type": "queue",
       "routing_key": "order.created",
       "arguments": {}
