@@ -13,9 +13,9 @@ namespace OrderApi.Controllers
     {
         private readonly ILogger<OrdersController> _logger;
         private static readonly List<Order> Orders = new List<Order>();
-        private readonly RabbitMqClient _rabbitMqClient;
+        private readonly RabbitMQClient _rabbitMqClient;
 
-        public OrdersController(ILogger<OrdersController> logger, RabbitMqClient rabbitMqClient)
+        public OrdersController(ILogger<OrdersController> logger, RabbitMQClient rabbitMqClient)
         {
             _logger = logger;
             _rabbitMqClient = rabbitMqClient;

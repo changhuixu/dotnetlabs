@@ -1,3 +1,4 @@
+using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -5,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using OrderApi.RabbitMQ;
+using RabbitMQ.Client;
 
 namespace OrderApi
 {
@@ -20,7 +22,19 @@ namespace OrderApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddSingleton<RabbitMqClient>();
+
+            var rabbitHostName = Environment.GetEnvironmentVariable("RABBIT_HOSTNAME");
+            var connectionFactory = new ConnectionFactory
+            {
+                HostName = rabbitHostName ?? "localhost",
+                Port = 5672,
+                UserName = "ops0",
+                Password = "ops0"
+            };
+            var rabbitMqConnection = connectionFactory.CreateConnection();
+            services.AddSingleton(rabbitMqConnection);
+            services.AddSingleton<RabbitMQClient>();
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "OrdersAPI", Version = "v1" });
@@ -54,8 +68,8 @@ namespace OrderApi
             hostApplicationLifetime.ApplicationStarted.Register(() => { });
             hostApplicationLifetime.ApplicationStopping.Register(() =>
             {
-                var rabbitMqClient = app.ApplicationServices.GetRequiredService<RabbitMqClient>();
-                rabbitMqClient.Close();
+                var rabbitMqClient = app.ApplicationServices.GetRequiredService<RabbitMQClient>();
+                rabbitMqClient.CloseConnection();
             });
         }
     }
