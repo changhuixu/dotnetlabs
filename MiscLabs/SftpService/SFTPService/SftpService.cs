@@ -51,7 +51,7 @@ namespace SFTPService
             try
             {
                 client.Connect();
-                using var s = new FileStream(localFilePath, FileMode.Open);
+                using var s = File.OpenRead(localFilePath);
                 client.UploadFile(s, remoteFilePath);
                 _logger.LogInformation($"Finished uploading file [{localFilePath}] to [{remoteFilePath}]");
             }
@@ -71,7 +71,7 @@ namespace SFTPService
             try
             {
                 client.Connect();
-                using var s = new FileStream(localFilePath, FileMode.Create);
+                using var s = File.Create(localFilePath);
                 client.DownloadFile(remoteFilePath, s);
                 _logger.LogInformation($"Finished downloading file [{localFilePath}] from [{remoteFilePath}]");
             }
