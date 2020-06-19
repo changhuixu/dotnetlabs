@@ -69,13 +69,13 @@ namespace Colors.API.Controllers
         [HttpPost("multiple-files")]
         public async Task Upload(List<IFormFile> files)
         {
-            // todo: Currently not working due to an issue in swagger-ui (https://github.com/swagger-api/swagger-ui/issues/4600)
-            // todo: Can also follow this issue https://github.com/domaindrivendev/Swashbuckle.AspNetCore/issues/1029
-
             _logger.LogInformation($"validating {files.Count} files");
-            _logger.LogInformation("saving files");
-            await Task.Delay(2000);
-            _logger.LogInformation("files saved.");
+            foreach (var file in files)
+            {
+                _logger.LogInformation($"saving file {file.FileName}");
+                await Task.Delay(1000);
+            }
+            _logger.LogInformation("All files saved.");
         }
 
         [HttpDelete("{id}")]
