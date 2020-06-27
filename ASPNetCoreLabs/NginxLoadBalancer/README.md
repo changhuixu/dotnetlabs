@@ -1,5 +1,11 @@
 # Host an ASP.NET Core App with Nginx and Docker: SSL and Load Balancing
 
+## [Medium Article](https://codeburst.io/load-balancing-an-asp-net-core-web-app-using-nginx-and-docker-66753eb08204)
+
+Following the two articles, _[Configure ASP.NET Core to work with proxy servers and load balancers](https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/linux-nginx?view=aspnetcore-3.1#configure-nginx)_ and _[Host ASP.NET Core on Linux with Nginx](https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/linux-nginx?view=aspnetcore-3.1)_, in Microsoft Docs, I created a demo application using Docker Compose, which orchestrates an Nginx reverse proxy server and an ASP.NET Core Web API app. The following screen recording shows the demo app.
+
+![load balancing](./load-balancing.gif)
+
 ## Load Balancing
 
 ```bash
