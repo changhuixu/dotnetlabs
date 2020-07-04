@@ -27,6 +27,11 @@ namespace JwtAuthDemo.Controllers
             _tokenManagement = tokenManagement;
         }
 
+        /// <summary>
+        /// JWT login
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [AllowAnonymous]
         [HttpPost("login")]
         public ActionResult Login([FromBody] LoginRequest request)
@@ -66,11 +71,18 @@ namespace JwtAuthDemo.Controllers
 
     public class LoginRequest
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <example>admin</example>
         [Required]
         [JsonPropertyName("username")]
         public string UserName { get; set; }
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <example>securePassword</example>
         [Required]
         [JsonPropertyName("password")]
         public string Password { get; set; }
@@ -78,6 +90,10 @@ namespace JwtAuthDemo.Controllers
 
     public class LoginResult
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <example>admin</example>
         public string UserName { get; set; }
         public string JwtToken { get; set; }
     }

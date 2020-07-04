@@ -11,3 +11,7 @@ This repository demos a Web API project that is configured to use JWT authentica
 ### Screen recording for an API with Basic Authentication
 
 ![Screen recording for an API with Basic Authentication](./basic-auth-edge.gif)
+
+### Screen recording for API authentication in Swagger UI
+
+![Screen recording for API authentication in Swagger UI](./swagger-auth.gif)
