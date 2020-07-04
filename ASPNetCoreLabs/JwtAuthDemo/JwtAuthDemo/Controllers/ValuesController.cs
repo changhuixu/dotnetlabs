@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using JwtAuthDemo.Infrastructure.BasicAuth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -31,7 +32,8 @@ namespace JwtAuthDemo.Controllers
         [Authorize]
         public IEnumerable<int> JwtAuth()
         {
-            _logger.LogInformation("jwt auth");
+            var username = User.Identity.Name;
+            _logger.LogInformation($"User [{username}] is visiting jwt auth with token {1}");
             var rng = new Random();
             return Enumerable.Range(1, 10).Select(x => rng.Next(0, 100));
         }

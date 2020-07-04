@@ -56,7 +56,11 @@ namespace JwtAuthDemo.Controllers
                 signingCredentials: credentials);
             var token = new JwtSecurityTokenHandler().WriteToken(jwtToken);
             _logger.LogInformation($"User [{request.UserName}] logged in the system.");
-            return Ok(token);
+            return Ok(new LoginResult
+            {
+                UserName = request.UserName,
+                JwtToken = token
+            });
         }
     }
 
@@ -70,5 +74,11 @@ namespace JwtAuthDemo.Controllers
         [Required]
         [JsonPropertyName("password")]
         public string Password { get; set; }
+    }
+
+    public class LoginResult
+    {
+        public string UserName { get; set; }
+        public string JwtToken { get; set; }
     }
 }
