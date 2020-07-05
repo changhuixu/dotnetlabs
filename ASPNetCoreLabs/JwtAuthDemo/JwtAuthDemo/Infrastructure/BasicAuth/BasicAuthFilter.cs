@@ -12,6 +12,7 @@ namespace JwtAuthDemo.Infrastructure.BasicAuth
     public class BasicAuthFilter : IAuthorizationFilter
     {
         private readonly string _realm;
+
         public BasicAuthFilter(string realm)
         {
             _realm = realm;
