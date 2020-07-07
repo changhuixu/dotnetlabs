@@ -1,6 +1,8 @@
 # JWT auth demo and Basic auth demo
 
-This repository demos a Web API project that is configured to use JWT authentication globally, and some action methods can be configured to use Basic Auth using an attribute.
+This repository demos a Web API project, `JwtAuthDemo`, which is configured to use JWT authentication globally, and some action methods can be configured to use Basic Auth using an attribute.
+
+There is another Console app `BasicAuthApiConsumer`, which is a demo to consume a Basic Authentication API endpoint.
 
 ## Medium Articles
 
