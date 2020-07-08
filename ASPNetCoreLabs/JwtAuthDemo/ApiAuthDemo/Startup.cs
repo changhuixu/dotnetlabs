@@ -2,8 +2,8 @@ using System;
 using System.IO;
 using System.Reflection;
 using System.Text;
-using JwtAuthDemo.Infrastructure.Jwt;
-using JwtAuthDemo.Services;
+using ApiAuthDemo.Infrastructure.Jwt;
+using ApiAuthDemo.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -13,7 +13,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
-namespace JwtAuthDemo
+namespace ApiAuthDemo
 {
     public class Startup
     {
@@ -55,13 +55,13 @@ namespace JwtAuthDemo
                 c.SwaggerDoc("v1", new OpenApiInfo
                 {
                     Version = "v1",
-                    Title = "JWT Auth API",
-                    Description = "A simple example JWT Auth API",
+                    Title = "API Auth Demo",
+                    Description = "A simple demo with JWT Auth APIs and Basic Auth APIs",
                     Contact = new OpenApiContact
                     {
                         Name = @"GitHub Repository",
                         Email = string.Empty,
-                        Url = new Uri("https://github.com/changhuixu/dotnetlabs/tree/master/ASPNetCoreLabs/JwtAuthDemo")
+                        Url = new Uri("https://github.com/dotnet-labs/ApiAuthDemo")
                     }
                 });
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
@@ -123,7 +123,7 @@ namespace JwtAuthDemo
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
-                c.DocumentTitle = "JWT Auth API";
+                c.DocumentTitle = "API Auth Demo";
                 c.DefaultModelsExpandDepth(0);
                 c.RoutePrefix = string.Empty;
             });

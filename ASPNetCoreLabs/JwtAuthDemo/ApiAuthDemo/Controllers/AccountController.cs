@@ -4,14 +4,14 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Text.Json.Serialization;
-using JwtAuthDemo.Infrastructure.Jwt;
-using JwtAuthDemo.Services;
+using ApiAuthDemo.Infrastructure.Jwt;
+using ApiAuthDemo.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 
-namespace JwtAuthDemo.Controllers
+namespace ApiAuthDemo.Controllers
 {
     [ApiController]
     [Route("[controller]")]

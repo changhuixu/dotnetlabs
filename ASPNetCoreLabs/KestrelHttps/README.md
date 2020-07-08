@@ -2,6 +2,8 @@
 
 Kestrel used as an edge (Internet-facing) web server.
 
+## [Medium Article: Hosting an ASP.NET Core App on Docker with HTTPS](https://codeburst.io/hosting-an-asp-net-core-app-on-docker-with-https-642cde4f04e8)
+
 ## Configure Kestrel
 
 [Documentation in Microsoft Docs](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/servers/kestrel)

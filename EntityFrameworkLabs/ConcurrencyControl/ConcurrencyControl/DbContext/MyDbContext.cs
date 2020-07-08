@@ -3,8 +3,6 @@ using System.Reflection;
 using ConcurrencyControl.DbContext.Configurations;
 using ConcurrencyControl.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Console;
 
 namespace ConcurrencyControl.DbContext
 {
@@ -18,12 +16,7 @@ namespace ConcurrencyControl.DbContext
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder = optionsBuilder
-                .UseLoggerFactory(new LoggerFactory(new[]
-                {
-                    new ConsoleLoggerProvider((category, level)
-                        => category == DbLoggerCategory.Database.Command.Name
-                           && level == LogLevel.Information, true)
-                }))
+                .UseLoggerFactory(Program.MyLoggerFactory)
                 .UseSqlite($"Data source={DbFileName}",
                     options => { options.MigrationsAssembly(Assembly.GetExecutingAssembly().FullName); });
             base.OnConfiguring(optionsBuilder);

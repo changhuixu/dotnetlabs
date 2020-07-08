@@ -1,4 +1,4 @@
-# Windows Service Demo
+# Windows Service in ASP.NET Core
 
 ## [Medium Article](https://codeburst.io/create-a-windows-service-app-in-net-core-3-0-5ecb29fb5ad0)
 

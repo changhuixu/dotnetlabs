@@ -1,8 +1,10 @@
-# JWT auth demo and Basic auth demo
+# API Auth Demo: JWT auth and Basic auth (Repository Archived)
 
-This repository demos a Web API project, `JwtAuthDemo`, which is configured to use JWT authentication globally, and some action methods can be configured to use Basic Auth using an attribute.
+## New Repository ([https://github.com/dotnet-labs/ApiAuthDemo](https://github.com/dotnet-labs/ApiAuthDemo))
 
-There is another Console app `BasicAuthApiConsumer`, which is a demo to consume a Basic Authentication API endpoint.
+This repository demos a Web API project, `ApiAuthDemo`, which is configured to use JWT authentication globally, and some action methods can be configured to use Basic Auth using an attribute. The demo website root is its Swagger user interface.
+
+There is another Console app `BasicAuthApiConsumer`, which is a demo to consume a Basic Authentication API endpoint. The Console app needs to run after you start the `ApiAuthDemo` website, and you can adjust the URL in the Console program accordingly.
 
 ## Medium Articles
 

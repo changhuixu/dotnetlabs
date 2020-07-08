@@ -5,11 +5,22 @@ using ConcurrencyControl.DbContext;
 using ConcurrencyControl.Models;
 using ConcurrencyControl.Utils;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace ConcurrencyControl
 {
     internal class Program
     {
+        public static readonly ILoggerFactory MyLoggerFactory
+            = LoggerFactory.Create(builder =>
+            {
+                builder
+                    .AddFilter("Microsoft", LogLevel.Warning)
+                    .AddFilter("System", LogLevel.Warning)
+                    .AddFilter("Microsoft.EntityFrameworkCore", LogLevel.Information)
+                    .AddConsole();
+            });
+
         private static async Task Main()
         {
             MyDbContext.EnsureDatabaseIsCleaned();
@@ -18,8 +29,8 @@ namespace ConcurrencyControl
                 dbContext.Database.Migrate();
                 if (dbContext.Database.IsSqlite())
                 {
-                    await dbContext.Database.ExecuteSqlCommandAsync(
-                        @"
+                    await dbContext.Database.ExecuteSqlRawAsync(
+                       @"
                             CREATE TRIGGER SetTimestampOnUpdate
                             AFTER UPDATE ON ConcurrentAccountsWithRowVersion
                             BEGIN
@@ -28,7 +39,7 @@ namespace ConcurrencyControl
                                 WHERE rowid = NEW.rowid;
                             END
                         ");
-                    await dbContext.Database.ExecuteSqlCommandAsync(
+                    await dbContext.Database.ExecuteSqlRawAsync(
                         @"
                             CREATE TRIGGER SetTimestampOnInsert
                             AFTER INSERT ON ConcurrentAccountsWithRowVersion

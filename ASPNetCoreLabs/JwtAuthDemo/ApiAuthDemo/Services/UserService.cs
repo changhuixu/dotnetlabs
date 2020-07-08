@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 
-namespace JwtAuthDemo.Services
+namespace ApiAuthDemo.Services
 {
     public interface IUserService
     {

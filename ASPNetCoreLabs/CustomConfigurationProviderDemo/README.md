@@ -7,3 +7,13 @@ ASP.NET Core offers a native configuration system that is lightweight and highly
 Custom configuration providers are not uncommon. In many software architectures, configuration sources reside in separate stores in order to decouple the configurations from the application. Then we can use a custom configuration provider to send HTTP request or query database to load those configurations. For example, in a custom configuration provider, we can load configuration data from a master database, which controls settings for multiple instances of application.
 
 In this post, for simplicity purposes, we are going to implement a basic custom configuration provider that reads configurations from a SQLite database. The full solution is in this GitHub repository.
+
+## Solution Structure
+
+- `Demo` project
+
+  Implementation of a custom provider `MyConfigurationProvider`
+
+- `Demo.IntegrationTests` project
+
+  Integration tests

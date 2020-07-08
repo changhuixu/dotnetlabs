@@ -2,12 +2,12 @@
 using System.Net;
 using System.Net.Http.Headers;
 using System.Text;
-using JwtAuthDemo.Services;
+using ApiAuthDemo.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace JwtAuthDemo.Infrastructure.BasicAuth
+namespace ApiAuthDemo.Infrastructure.BasicAuth
 {
     public class BasicAuthFilter : IAuthorizationFilter
     {

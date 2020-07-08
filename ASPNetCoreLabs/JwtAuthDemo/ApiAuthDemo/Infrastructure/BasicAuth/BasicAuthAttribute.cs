@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.AspNetCore.Mvc;
 
-namespace JwtAuthDemo.Infrastructure.BasicAuth
+namespace ApiAuthDemo.Infrastructure.BasicAuth
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
     public class BasicAuthAttribute : TypeFilterAttribute
